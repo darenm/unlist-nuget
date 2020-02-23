@@ -1,4 +1,4 @@
-# ✨ Publish NuGet
+# ✨ Unlist NuGet
 GitHub action to unlist existing nuget packages that match a regex automatically when a project is updated
 
 ## Usage
