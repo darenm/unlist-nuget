@@ -1,11 +1,12 @@
 # ✨ Publish NuGet
-GitHub action to unlist nuget packages automatically when a project is updated
+GitHub action to unlist existing nuget packages that match a regex automatically when a project is updated
 
 ## Usage
-Create new `.github/workflows/publish.yml` file:
+Create new `.github/workflows/build-publish.yml` file:
 
 ```yml
-name: publish to nuget
+name: build/publish to nuget
+
 on:
   push:
     branches:
@@ -17,34 +18,35 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Required for a specific dotnet version that doesn't come with ubuntu-latest / windows-latest
-      # Visit bit.ly/2synnZl to see the list of SDKs that are pre-installed with ubuntu-latest / windows-latest
-      # - name: Setup dotnet
-      #   uses: actions/setup-dotnet@v1
-      #   with:
-      #     dotnet-version: 3.1.100
+      # build your solution and generate packages
       
-      # Publish
-      - name: publish on version change
+      # Unlist
+      - name: unlist previous alpha 1.0.x alpha packages
         uses: darenm/unlist-nuget@v1
         with:
+          NUGET_PACKAGE: Company.Namespace.Package # Full Package ID
           VERSION_REGEX: ^1.0.\d+-d(\d+)-alpha # Regex pattern to match version
           NUGET_KEY: ${{secrets.NUGET_API_KEY}} # nuget.org API key
+
+      # publish your new package
 ```
 
-- With all settings on default, updates to project version are monitored on every push / PR merge to master & a new tag is created
-- If a `NUGET_KEY` is present then the project gets built, packed & published to nuget.org
+* The regex `^1.0.\d+-d(\d+)-alpha` matches patterns like:
+  * 1.0.0-d200220-alpha
+  * 1.0.1-d20022000-alpha
+  * 1.0.2-d20022001-alpha
+  * 1.0.3-d2002200400-alpha
+  * 1.0.4-d2002200412-beta
+  * 1.0.5-d20022027-alpha
 
 ## Inputs
-Most of the inputs are optional
+All of the inputs are required.
 
-Input | Default Value | Description
+Input | Example Value | Description
 --- | --- | ---
-VERSION_REGEX | `<Version>(.*)<\/Version>` | Regex pattern to extract version info in a 
-NUGET_KEY | | API key to authorize the package upload to nuget.org
-
-**Note:**  
-For multiple projects, every input except `PROJECT_FILE_PATH` can be given as `env` variable at [job / workflow level](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#env)
+NUGET_PACKAGE | `Company.Namespace.Package` | The NuGet Package ID
+VERSION_REGEX | `^1.0.\d+-d(\d+)-alpha` | Regex pattern to match versions that should be unlisted
+NUGET_KEY | `${{secrets.NUGET_API_KEY}}` | API key to authorize the package upload to nuget.org
 
 ## License
 [MIT](LICENSE)
