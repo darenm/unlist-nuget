@@ -6,14 +6,15 @@ inputs:
     description: The nuget package name
     required: false
   VERSION_REGEX:
-    description: Regex to match the packages to be deleted/unlisted
+    description: Regex to match the package versions to be deleted/unlisted
     required: true
   NUGET_KEY:
-    description: API key for the NuGet feed
+    description: API key for the NuGet feed - must have unlist right
     required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
-  branding:
-    icon: package
-    color: blue
+
+branding:
+  icon: package
+  color: blue
