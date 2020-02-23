@@ -46,7 +46,7 @@ Input | Example Value | Description
 --- | --- | ---
 NUGET_PACKAGE | `Company.Namespace.Package` | The NuGet Package ID
 VERSION_REGEX | `^1.0.\d+-d(\d+)-alpha` | Regex pattern to match versions that should be unlisted
-NUGET_KEY | `${{secrets.NUGET_API_KEY}}` | API key to authorize the package upload to nuget.org
+NUGET_KEY | `${{secrets.NUGET_API_KEY}}` | API key to authorize the package unlist on nuget.org
 
 ## License
 [MIT](LICENSE)
