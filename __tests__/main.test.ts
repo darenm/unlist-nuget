@@ -16,7 +16,7 @@ test('Create instance of Action - succeed', () => {
   try {
     a = new Action(
       'CustomMayd.Services.Serialization',
-      '^(\\d+\\.\\d+\\.\\d+)-d(\\d+)-alpha',
+      '^1.0.\\d+-d(\\d+)-alpha',
       '<A DUMMY KEY>'
     )
   } catch (Error) {}
@@ -27,7 +27,7 @@ test('getPackageVersions', async () => {
   let a: Action | undefined = undefined
   a = new Action(
     'CustomMayd.Services.Serialization',
-    '^(\\d+\\.\\d+\\.\\d+)-d(\\d+)-alpha',
+    '^1.0.\\d+-d(\\d+)-alpha',
     '<A DUMMY KEY>'
   )
 
@@ -44,7 +44,7 @@ test('relistPackageVersion - succeed', async () => {
   let a: Action | undefined = undefined
   a = new Action(
     'CustomMayd.Services.Serialization',
-    '^(\\d+\\.\\d+\\.\\d+)-d(\\d+)-alpha',
+    '^1.0.\\d+-d(\\d+)-alpha',
     nugetKey
   )
 
@@ -59,7 +59,7 @@ test('deletePackageVersion - succeed', async () => {
   let a: Action | undefined = undefined
   a = new Action(
     'CustomMayd.Services.Serialization',
-    '^(\\d+\\.\\d+\\.\\d+)-d(\\d+)-alpha',
+    '^1.0.\\d+-d(\\d+)-alpha',
     nugetKey
   )
 
@@ -74,7 +74,7 @@ test('relistPackageVersion - fail', async () => {
   let a: Action | undefined = undefined
   a = new Action(
     'CustomMayd.Services.Serialization',
-    '^(\\d+\\.\\d+\\.\\d+)-d(\\d+)-alpha',
+    '^1.0.\\d+-d(\\d+)-alpha',
     nugetKey
   )
 
@@ -89,7 +89,7 @@ test('deletePackageVersion - fail', async () => {
   let a: Action | undefined = undefined
   a = new Action(
     'CustomMayd.Services.Serialization',
-    '^(\\d+\\.\\d+\\.\\d+)-d(\\d+)-alpha',
+    '^1.0.\\d+-d(\\d+)-alpha',
     nugetKey
   )
 
@@ -124,19 +124,19 @@ test('matchVersionsToRegExp - succeed', () => {
   let a: Action | undefined = undefined
   a = new Action(
     'CustomMayd.Services.Serialization',
-    '^(1\\.0\\.0)-d(\\d+)-alpha',
+    '^1.0.\\d+-d(\\d+)-alpha',
     'nugetKey'
   )
 
   const result = a.matchVersionsToRegExp(versions)
-  expect(result.length).toEqual(11)
+  expect(result.length).toEqual(12)
 })
 
 // shows how the runner will run a javascript action with env / stdout protocol
 test('test runs', () => {
   process.env['INPUT_NUGET_PACKAGE'] = 'CustomMayd.Services.Serialization'
-  process.env['INPUT_VERSION_REGEX'] = '^(\\d+\\.\\d+\\.\\d+)-d(\\d+)-alpha'
-  process.env['INPUT_NUGET_KEY'] = '<A DUMMY KEY>'
+  process.env['INPUT_VERSION_REGEX'] = '^1.0.\\d+-d(\\d+)-alpha'
+  process.env['INPUT_NUGET_KEY'] = process.env['NUGET_KEY']
   const ip = path.join(__dirname, '..', 'lib', 'main.js')
   const options: cp.ExecSyncOptions = {
     env: process.env

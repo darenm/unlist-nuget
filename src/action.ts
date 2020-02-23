@@ -31,13 +31,7 @@ export class Action {
 
   async run(): Promise<void> {
     try {
-      const ms: string = core.getInput('milliseconds')
-      core.debug(`Waiting ${ms} milliseconds ...`)
-
-      core.debug(new Date().toTimeString())
-      core.debug(new Date().toTimeString())
-
-      core.setOutput('time', new Date().toTimeString())
+      await this.unlistMatchingPackageVersions()
     } catch (error) {
       core.setFailed(error.message)
     }
@@ -58,10 +52,14 @@ export class Action {
     const additionalHeaders = {['X-NuGet-ApiKey']: this.nuGetKey}
     const uri = `https://www.nuget.org/api/v2/package/${this.packageId}/${version}`
 
+    console.log(uri)
+
     const res: httpm.HttpClientResponse = await _http.del(
       uri,
       additionalHeaders
     )
+
+    console.log(res.message.statusCode)
     return res.message.statusCode === 204 || res.message.statusCode === 200
       ? true
       : false
@@ -91,7 +89,22 @@ export class Action {
     return matchedVersions
   }
 
-  async unlistMatchingPackageVersions(): Promise<void> {}
+  async unlistMatchingPackageVersions(): Promise<number> {
+    const packageVersions = await this.getPackageVersions()
+    const matchedVersions = this.matchVersionsToRegExp(packageVersions.versions)
+    let count = 0
+    let result: boolean
+    for (const version of matchedVersions) {
+      result = await this.deletePackageVersion(version)
+      if (!result) {
+        Action.warn(`Unable to unlist ${this.packageId} - ${version}`)
+      } else {
+        count++
+      }
+    }
+
+    return count
+  }
 
   private static fail(message: string): void {
     console.log(`##[error]${message}`)

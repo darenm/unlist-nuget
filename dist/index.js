@@ -98,11 +98,7 @@ class Action {
     run() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const ms = core.getInput('milliseconds');
-                core.debug(`Waiting ${ms} milliseconds ...`);
-                core.debug(new Date().toTimeString());
-                core.debug(new Date().toTimeString());
-                core.setOutput('time', new Date().toTimeString());
+                yield this.unlistMatchingPackageVersions();
             }
             catch (error) {
                 core.setFailed(error.message);
@@ -124,7 +120,9 @@ class Action {
             const _http = new httpm.HttpClient('unlist-nuget');
             const additionalHeaders = { ['X-NuGet-ApiKey']: this.nuGetKey };
             const uri = `https://www.nuget.org/api/v2/package/${this.packageId}/${version}`;
+            console.log(uri);
             const res = yield _http.del(uri, additionalHeaders);
+            console.log(res.message.statusCode);
             return res.message.statusCode === 204 || res.message.statusCode === 200
                 ? true
                 : false;
@@ -149,7 +147,22 @@ class Action {
         return matchedVersions;
     }
     unlistMatchingPackageVersions() {
-        return __awaiter(this, void 0, void 0, function* () { });
+        return __awaiter(this, void 0, void 0, function* () {
+            const packageVersions = yield this.getPackageVersions();
+            const matchedVersions = this.matchVersionsToRegExp(packageVersions.versions);
+            let count = 0;
+            let result;
+            for (const version of matchedVersions) {
+                result = yield this.deletePackageVersion(version);
+                if (!result) {
+                    Action.warn(`Unable to unlist ${this.packageId} - ${version}`);
+                }
+                else {
+                    count++;
+                }
+            }
+            return count;
+        });
     }
     static fail(message) {
         console.log(`##[error]${message}`);
