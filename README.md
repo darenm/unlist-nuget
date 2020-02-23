@@ -28,7 +28,7 @@ jobs:
       - name: publish on version change
         uses: darenm/unlist-nuget@v1
         with:
-          VERSION_REGEX: <Version>(.*)<\/Version> # Regex pattern to extract version info in a capturing group
+          VERSION_REGEX: ^1.0.\d+-d(\d+)-alpha # Regex pattern to match version
           NUGET_KEY: ${{secrets.NUGET_API_KEY}} # nuget.org API key
 ```
 
