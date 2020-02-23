@@ -14,7 +14,7 @@ on:
 jobs:
   publish:
     name: unlist on nuget
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
 
