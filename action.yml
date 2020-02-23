@@ -1,10 +1,19 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Unlist NuGet Package'
+description: 'Uses a regular expression to match one or more packages to unlist from nuget.org'
+author: 'Daren May'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  NUGET_PACKAGE:
+    description: The nuget package name
+    required: false
+  VERSION_REGEX:
+    description: Regex to match the packages to be deleted/unlisted
+    required: true
+  NUGET_KEY:
+    description: API key for the NuGet feed
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
+  branding:
+    icon: package
+    color: blue

@@ -1,19 +1,8 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import {Action} from './action'
 
-async function run(): Promise<void> {
-  try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`)
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    core.setFailed(error.message)
-  }
-}
-
-run()
+const action = new Action(
+  process.env.INPUT_NUGET_PACKAGE || process.env.NUGET_PACKAGE,
+  process.env.INPUT_VERSION_REGEX || process.env.VERSION_REGEX,
+  process.env.INPUT_NUGET_KEY || process.env.NUGET_KEY
+)
+action.run()
