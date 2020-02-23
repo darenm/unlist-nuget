@@ -1,6 +1,11 @@
 # ✨ Unlist NuGet
 GitHub action to unlist existing nuget packages that match a regex automatically when a project is updated
 
+[![typescript-action status](https://github.com/actions/typescript-action/workflows/build-test/badge.svg)](https://github.com/actions/typescript-action/workflows/build-test/badge.svg)
+[![Downloads](https://img.shields.io/github/downloads/darenm/unlist-nuget/total.svg?label=Downloads)](https://github.com/darenm/unlist-nuget/releases/)
+[![Release](https://img.shields.io/github/release/darenm/unlist-nuget.svg?label=Release)](https://github.com/darenm/unlist-nuget/releases)
+[![Contributors](https://img.shields.io/github/contributors/darenm/unlist-nuget?label=Contributors)](https://github.com/darenm/unlist-nuget/graphs/contributors)
+
 ## Usage
 Create new `.github/workflows/build-publish.yml` file:
 
