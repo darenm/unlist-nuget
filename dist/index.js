@@ -120,9 +120,7 @@ class Action {
             const _http = new httpm.HttpClient('unlist-nuget');
             const additionalHeaders = { ['X-NuGet-ApiKey']: this.nuGetKey };
             const uri = `https://www.nuget.org/api/v2/package/${this.packageId}/${version}`;
-            console.log(uri);
             const res = yield _http.del(uri, additionalHeaders);
-            console.log(res.message.statusCode);
             return res.message.statusCode === 204 || res.message.statusCode === 200
                 ? true
                 : false;
